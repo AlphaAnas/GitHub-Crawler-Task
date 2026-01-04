@@ -5,7 +5,8 @@ on: workflow_dispatch
 jobs:
   crawl-and-dump:
     runs-on: ubuntu-latest
-    [cite_start]# [cite: 16] Service Container Definition
+
+    # Service Container: Postgres
     services:
       postgres:
         image: postgres:latest
@@ -15,6 +16,7 @@ jobs:
           POSTGRES_DB: github_data
         ports:
           - 5432:5432
+        
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -22,7 +24,8 @@ jobs:
           --health-retries 5
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -32,21 +35,18 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      [cite_start]# [cite: 18] Setup Schema Step
-      - name: Setup Database
+      - name: Setup Database Schema
         run: python main.py --mode=setup
         env:
+         
           DB_URL: postgresql://user:password@localhost:5432/github_data
 
-      [cite_start]# [cite: 19] Crawl Step
       - name: Crawl Stars
         run: python main.py --mode=crawl
         env:
-          [cite_start]# [cite: 22] Using default token
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DB_URL: postgresql://user:password@localhost:5432/github_data
 
-      [cite_start]# [cite: 21] Dump and Upload
       - name: Dump Data to CSV
         run: |
           PGPASSWORD=password psql -h localhost -U user -d github_data -c "\COPY (SELECT * FROM github_repos) TO 'results.csv' WITH CSV HEADER"
