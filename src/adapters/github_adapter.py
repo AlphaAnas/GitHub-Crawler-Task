@@ -13,7 +13,7 @@ class GraphQLGitHubAdapter(IGitHubSource):
     async def fetch_repos(self, batch_size: int, total_limit: int) -> list[GitHubRepo]:
         repos = []
         cursor = None
-        # Search for all the repos with more than 100 stars, sorted by recently updated and get first 100
+        # so search for all the repos with more than 100 stars, sorted by recently updated and get first 100
         query_template = """
         query($cursor: String) {
           search(query: "stars:>100 sort:updated", type: REPOSITORY, first: 100, after: $cursor) {

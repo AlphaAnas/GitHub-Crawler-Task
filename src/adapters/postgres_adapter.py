@@ -9,7 +9,7 @@ class PostgresAdapter(IRepoStorage):
 
     async def setup_schema(self):
         conn = await asyncpg.connect(self.db_url)
-        # Using BIGINT for ID and UPSERT strategy for efficiency 
+        
         await conn.execute("""
             CREATE TABLE IF NOT EXISTS github_repos (
                 id BIGINT PRIMARY KEY,
@@ -25,7 +25,10 @@ class PostgresAdapter(IRepoStorage):
 
     async def upsert_repos(self, repos: List[GitHubRepo]):
         conn = await asyncpg.connect(self.db_url)
-        # Efficient bulk insert/update
+    
+
+
+    
         values = [(r.id, r.name, r.owner, r.stars, r.url, r.crawled_at) for r in repos]
         
         await conn.executemany("""

@@ -3,7 +3,7 @@ from datetime import datetime
 
 @dataclass(frozen=True)
 class GitHubRepo:
-    id: int  # GitHub Database ID
+    id: int  
     name: str
     owner: str
     stars: int
