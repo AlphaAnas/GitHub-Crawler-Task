@@ -1,6 +1,12 @@
 name: GitHub Crawler Assignment
 
-on: workflow_dispatch
+
+on:
+  push:
+    branches: [ "main" ]  
+  workflow_dispatch:      
+
+
 
 jobs:
   crawl-and-dump:
