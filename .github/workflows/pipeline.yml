@@ -58,7 +58,7 @@ jobs:
           PGPASSWORD=password psql -h localhost -U user -d github_data -c "\COPY (SELECT * FROM github_repos) TO 'results.csv' WITH CSV HEADER"
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: crawled-data
           path: results.csv
